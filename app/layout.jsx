@@ -1,0 +1,1 @@
+import "./globals.css"; export const metadata={title:"EGG Mission Deck",description:"Intent to verified delivery"}; export default function RootLayout({children}){return <html lang="en"><body>{children}</body></html>}
