@@ -1,0 +1,10 @@
+{
+  "feed_id":"VALUE-OBSERVATORY-FEED-001",
+  "generated":"2026-10-04",
+  "source":"EGG CONTROL PLANE",
+  "values":[
+    {"id":"EDP-PROOF-001","state":"ACCEPTED","evidence":"RUN-20261004-EDP-GANG-TAY-002","acceptance":"ACC-EDP-002"},
+    {"id":"SWARM-PROOF-001","state":"ACCEPTED","evidence":"RUN-20261004-SWARM-001","acceptance":"ACC-SWARM-001"},
+    {"id":"K-GALLERY-MICROSITE-001","state":"TECHNICAL_VALUE_ACCEPTED","evidence":"VALUE-RECEIPT-K-GALLERY-MICROSITE-001","acceptance":"TECHNICAL"}
+  ]
+}
