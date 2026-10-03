@@ -1,1 +1,45 @@
-"use client"; import {useMemo,useState} from "react"; const stages=[["01","INTENT","Capture the Founder goal"],["02","PLAN","Decompose into executable work"],["03","ROUTE","Select workers + tools"],["04","EXECUTE","Build the real artifact"],["05","VERIFY","Test reality + collect evidence"]]; const presets=["Build a chess game I can play","Create a cinematic 10s Hanoi rain scene","Ship a gallery experience with sound"]; function makePlan(intent){const s=intent.toLowerCase();const video=/video|cinematic|rain|scene/.test(s);const chess=/chess|game/.test(s);const gallery=/gallery|sound|music/.test(s);return [{w:"Architect",a:"Turn intent into acceptance criteria",t:"Reasoning"},{w:video?"Cameraman EGG 2":chess?"Game Worker":gallery?"Gallery Worker":"Product Worker",a:video?"Lock story, camera grammar, continuity":chess?"Build board, rules, turns and legal moves":gallery?"Compose artwork-first space, sound and navigation":"Shape the smallest useful product",t:"Creation"},{w:"Hands",a:"Write files, run build and exercise the app",t:"Execution"},{w:"QA",a:"Browser-test the critical path and inspect failures",t:"Verification"},{w:"Delivery",a:"Publish only after the acceptance gate passes",t:"Release"}]} export default function Home(){const [intent,setIntent]=useState(presets[0]);const [running,setRunning]=useState(false);const [done,setDone]=useState(0);const [evidence,setEvidence]=useState([]);const plan=useMemo(()=>makePlan(intent),[intent]);function run(){setRunning(true);setDone(0);setEvidence([]);plan.forEach((_,i)=>setTimeout(()=>{setDone(i+1);setEvidence(e=>[...e,["Intent captured","Acceptance criteria derived","Worker route selected","Artifact execution simulated","Browser gate passed"][i]])},650*(i+1)));setTimeout(()=>setRunning(false),650*plan.length+100)}return <main><header><div className="eyebrow"><span className="dot"/> EGG / CONTROL PLANE</div><div className="top"><div><h1>Mission<br/><em>Deck.</em></h1><p className="sub">One sentence in. A verified build path out.</p></div><div className="status"><span>RUNTIME</span><b>ONLINE</b><small>Hands · Router · QA</small></div></div></header><section className="hero"><div className="label">FOUNDER INTENT</div><textarea value={intent} onChange={e=>setIntent(e.target.value)} aria-label="Founder intent"/><div className="presets">{presets.map(p=><button key={p} onClick={()=>setIntent(p)}>{p}</button>)}</div><button className="launch" onClick={run} disabled={running}>{running?"RUNNING MISSION…":"RUN MISSION"}<span>↗</span></button></section><section className="pipeline"><div className="section-head"><span>EXECUTION GRAPH</span><small>{done}/5 gates complete</small></div><div className="rail">{stages.map(([n,title,desc],i)=><div className={done>i?"node live":"node"} key={n}><div className="num">{n}</div><div><strong>{title}</strong><p>{desc}</p></div><i>{done>i?"✓":"—"}</i></div>)}</div></section><section className="lower"><div className="panel"><div className="section-head"><span>ROUTED WORKERS</span><small>{plan.length} nodes</small></div>{plan.map((x,i)=><div className={done>i?"worker verified":"worker"} key={x.w+i}><span>{String(i+1).padStart(2,"0")}</span><div><b>{x.w}</b><p>{x.a}</p></div><label>{x.t}</label></div>)}</div><div className="panel evidence"><div className="section-head"><span>REALITY / EVIDENCE</span><small>{evidence.length?"LIVE":"WAITING"}</small></div>{evidence.length?<>{evidence.map((x,i)=><div className="ev" key={x}><span>✓</span>{x}<small>gate {i+1}</small></div>)}<div className="accept">ACCEPTANCE GATE <b>{done===5?"PASSED":"RUNNING"}</b></div></>:<div className="empty">No claims.<br/><b>Evidence only.</b><br/><small>Run the mission to populate the gate log.</small></div>}</div></section><footer><span>EGG PROOF-OF-WORK · 01→04 FOUNDATION</span><span>v0.1 / REALITY OVER PROMISES</span></footer></main>}
+"use client";
+
+import { useEffect, useState } from "react";
+
+const values = [
+  {id:"dudu-siba-sticker",title:"DUDU × SIBA",product:"Sticker Pack #01",state:"ACCEPTED",evidence:["12 assets complete","Visual QA passed","Market-ready package"],acceptance:"PASSED",authority:"NONE",money:"—",next:"Market test"},
+  {id:"dudu-siba-story",title:"DUDU × SIBA",product:"Micro Story Engine",state:"TESTING",evidence:["Story formula locked","5 prototypes","Character consistency checked"],acceptance:"IN PROGRESS",authority:"NONE",money:"—",next:"Publish test batch"},
+  {id:"ip-bible",title:"DUDU × SIBA",product:"Character Bible",state:"ACCEPTED",evidence:["DUDU identity locked","Siba identity locked","Relationship defined"],acceptance:"PASSED",authority:"NONE",money:"—",next:"Feed Asset Factory"}
+];
+const metrics=[["VALUE OBJECTS","03"],["ACCEPTED","02"],["TESTING","01"],["AUTHORITY","00"]];
+
+export default function Home(){
+ const [selected,setSelected]=useState(values[0]);
+ const [showEvidence,setShowEvidence]=useState(true);
+ const [installed,setInstalled]=useState(false);
+ useEffect(()=>{if("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(()=>{});},[]);
+ const status=selected.authority==="NONE"?"NO FOUNDER ACTION REQUIRED":"FOUNDER AUTHORITY REQUIRED";
+ return <main className="cockpit">
+  <header className="topbar">
+   <div><div className="eyebrow"><span className="pulse"/> EGG / FOUNDER COCKPIT</div><h1>ĐÂU A <em>SOI 2</em></h1><p>VALUE OBSERVATORY · v0.1</p></div>
+   <div className="top-actions"><div className="live"><span/> LIVE</div><button className="install" onClick={()=>setInstalled(true)}>{installed?"PWA READY":"ADD TO PHONE"}</button></div>
+  </header>
+  <section className="attention"><span className="eyebrow">FOUNDER ATTENTION</span><strong>{status}</strong><small>Execution remains behind the cockpit.</small></section>
+  <section className="metrics">{metrics.map(([label,value])=><div className="metric" key={label}><span>{label}</span><b>{value}</b></div>)}</section>
+  <section className="value-grid">
+   <div className="value-list"><div className="section-title"><span>VALUE OBJECTS</span><small>{values.length} tracked</small></div>
+    {values.map(v=><button className={selected.id===v.id?"value-card active":"value-card"} key={v.id} onClick={()=>setSelected(v)}>
+      <div className="card-head"><span className="state">{v.state}</span><span>↗</span></div><h2>{v.title}</h2><p>{v.product}</p>
+      <div className="mini-flow"><span>VALUE</span><i>→</i><span>EVIDENCE</span><i>→</i><span>ACCEPTANCE</span></div>
+    </button>)}
+   </div>
+   <article className="detail">
+    <div className="detail-head"><div><span className="eyebrow">VALUE OBJECT</span><h2>{selected.title}</h2><p>{selected.product}</p></div><div className="accepted">{selected.acceptance}</div></div>
+    <div className="chain">
+     {[["01","VALUE",selected.product,true],["02","EVIDENCE",selected.evidence.length+" verified signals",true],["03","ACCEPTANCE",selected.acceptance,selected.acceptance==="PASSED"],["04","FOUNDER AUTHORITY",selected.authority,selected.authority==="NONE"]].map(([n,label,text,ok])=><div className={ok?"chain-node ok":"chain-node"} key={label}><span className="num">{n}</span><div><b>{label}</b><p>{text}</p></div><strong>{ok?"✓":"!"}</strong></div>)}
+    </div>
+    <button className="evidence-toggle" onClick={()=>setShowEvidence(!showEvidence)}>EVIDENCE {showEvidence?"−":"+"}</button>
+    {showEvidence&&<div className="evidence-list">{selected.evidence.map(item=><div key={item}><span>✓</span><p>{item}</p><small>VERIFIED</small></div>)}</div>}
+    <div className="value-footer"><div><span>NEXT VALUE</span><b>{selected.next}</b></div><div><span>MONEY</span><b>{selected.money}</b></div></div>
+   </article>
+  </section>
+  <section className="principle"><span>BIỆT ĐỘI</span><b>PROCESS</b><i>→</i><span>EGG</span><b>EVIDENCE</b><i>→</i><span>FOUNDER</span><b>VALUE</b></section>
+  <footer><span>ĐÂU A SOI 2 · FOUNDER COCKPIT</span><span>VALUE OBJECT → EVIDENCE → ACCEPTANCE → AUTHORITY</span></footer>
+ </main>
+}
